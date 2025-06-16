@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Controle de Projetos{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/custom.css">
+    
+    <style>
+        :root {
+            --primary-color: #1A2B50;
+            --secondary-color: #00F5A0;
+            --accent-color: #4ECDC4;
+            --danger-color: #FF6B6B;
+            --warning-color: #FFE66D;
+            --success-color: #96CEB4;
+            --dark-color: #2C3E50;
+            --light-color: #F8F9FA;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: rgba(26, 43, 80, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            color: var(--secondary-color) !important;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--secondary-color) !important;
+            transform: translateY(-2px);
+        }
+        
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            padding: 30px;
+            min-height: calc(100vh - 120px);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 10px 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 43, 80, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, var(--success-color), #7FB069);
+            border: none;
+            border-radius: 10px;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(45deg, var(--danger-color), #FF8E8E);
+            border: none;
+            border-radius: 10px;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(45deg, var(--warning-color), #FFD93D);
+            border: none;
+            border-radius: 10px;
+            color: var(--dark-color);
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #E9ECEF;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.2rem rgba(78, 205, 196, 0.25);
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        
+        .progress {
+            border-radius: 10px;
+            height: 8px;
+        }
+        
+        .progress-bar {
+            border-radius: 10px;
+        }
+        
+        .kpi-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .kpi-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .kpi-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .sidebar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .sidebar .nav-link {
+            color: var(--dark-color) !important;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: var(--primary-color);
+            color: white !important;
+        }
+        
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .table thead th {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+        
+        .badge {
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-weight: 500;
+        }
+        
+        .status-not-started { background-color: #E9ECEF; color: #6C757D; }
+        .status-in-progress { background-color: #FFF3CD; color: #856404; }
+        .status-completed { background-color: #D1EDFF; color: #0C5460; }
+        .status-paused { background-color: #F8D7DA; color: #721C24; }
+        
+        .priority-low { background-color: #D4EDDA; color: #155724; }
+        .priority-medium { background-color: #FFF3CD; color: #856404; }
+        .priority-high { background-color: #F8D7DA; color: #721C24; }
+        .priority-urgent { background-color: #F5C6CB; color: #721C24; }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .kpi-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top w-100" style="background: #1A2B50;">
+        {% if request.path == '/accounts/login/' or request.path == '/accounts/register/' or request.path == '/accounts/password_reset/' or request.path == '/accounts/password_reset/done/' or request.path == '/accounts/reset/done/' %}
+            <div class="container-fluid justify-content-center">
+                <a class="navbar-brand mx-auto text-center" style="font-size: 2rem; font-weight: 700; letter-spacing: 1px; width: 100%; display: flex; justify-content: center; align-items: center;">
+                    <i class="fas fa-project-diagram me-2"></i>
+                    Controle de Projetos
+                </a>
+            </div>
+        {% else %}
+            <div class="container-fluid justify-content-center">
+                <a class="navbar-brand mx-auto text-center" href="{% url 'dashboard:index' %}" style="font-size: 2rem; font-weight: 700; letter-spacing: 1px;">
+                    <i class="fas fa-project-diagram me-2"></i>
+                    Controle de Projetos
+                </a>
+            </div>
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'dashboard:index' %}">
+                                <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'activities:activity_list' %}">
+                                <i class="fas fa-tasks me-1"></i> Atividades
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'activities:action_list' %}">
+                                <i class="fas fa-list me-1"></i> Ações
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'dashboard:activities_report' %}">
+                                <i class="fas fa-chart-bar me-1"></i> Relatórios
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-user me-1"></i> {{ user.get_full_name|default:user.username }}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
+                                        <i class="fas fa-user-circle me-2"></i> Perfil
+                                    </a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Sair
+                                    </a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'accounts:login' %}">
+                                    <i class="fas fa-sign-in-alt me-1"></i> Entrar
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+    </nav>
+    <div style="height: 80px;"></div> <!-- Espaço para a navbar fixa -->
+    <!-- Conteúdo principal -->
+    <div class="main-content container mt-4">
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Page Content -->
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block title %}Minhas Atividades - Controle de Projetos{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0 text-primary">
+                        <i class="fas fa-tasks me-2"></i>Minhas Atividades
+                    </h1>
+                    <p class="text-muted mb-0">Gerencie suas atividades atribuídas</p>
+                </div>
+                <div>
+                    <a href="{% url 'activities:activity_create' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Nova Atividade
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" id="status" class="form-control">
+                                <option value="">Todos os status</option>
+                                {% for value, label in status_choices %}
+                                    <option value="{{ value }}" {% if current_filters.status == value %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="priority" class="form-label">Prioridade</label>
+                            <select name="priority" id="priority" class="form-control">
+                                <option value="">Todas as prioridades</option>
+                                {% for value, label in priority_choices %}
+                                    <option value="{{ value }}" {% if current_filters.priority == value %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-filter me-2"></i>Filtrar
+                            </button>
+                            <a href="{% url 'activities:activity_list' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Limpar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activities List -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    {% if activities %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Atividade</th>
+                                        <th>Ação</th>
+                                        <th>Status</th>
+                                        <th>Prioridade</th>
+                                        <th>Prazo</th>
+                                        <th>Progresso</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for activity in activities %}
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <a href="{% url 'activities:activity_detail' activity.pk %}" class="text-decoration-none fw-bold">
+                                                    {{ activity.name }}
+                                                </a>
+                                                {% if activity.description %}
+                                                    <br><small class="text-muted">{{ activity.description|truncatechars:50 }}</small>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'activities:action_detail' activity.action.pk %}" class="text-decoration-none">
+                                                {{ activity.action.name }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span class="badge status-{{ activity.status }}">
+                                                {{ activity.get_status_display }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge priority-{{ activity.priority }}">
+                                                {{ activity.get_priority_display }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="{% if activity.is_overdue %}text-danger fw-bold{% endif %}">
+                                                {{ activity.deadline|date:"d/m/Y" }}
+                                            </span>
+                                            {% if activity.is_overdue %}
+                                                <br><small class="text-danger">Atrasado</small>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="progress" style="width: 100px; height: 8px;">
+                                                {% if activity.status == 'completed' %}
+                                                    <div class="progress-bar bg-success" style="width: 100%"></div>
+                                                {% elif activity.status == 'in_progress' %}
+                                                    <div class="progress-bar bg-warning" style="width: 60%"></div>
+                                                {% elif activity.status == 'paused' %}
+                                                    <div class="progress-bar bg-danger" style="width: 30%"></div>
+                                                {% else %}
+                                                    <div class="progress-bar bg-secondary" style="width: 0%"></div>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="{% url 'activities:activity_detail' activity.pk %}" 
+                                                   class="btn btn-sm btn-outline-primary" 
+                                                   title="Ver detalhes">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{% url 'activities:activity_update' activity.pk %}" 
+                                                   class="btn btn-sm btn-outline-warning" 
+                                                   title="Editar">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <button type="button" 
+                                                        class="btn btn-sm btn-outline-success"
+                                                        onclick="updateStatus('{{ activity.pk }}', 'in_progress')"
+                                                        title="Iniciar">
+                                                    <i class="fas fa-play"></i>
+                                                </button>
+                                                <button type="button" 
+                                                        class="btn btn-sm btn-outline-info"
+                                                        onclick="updateStatus('{{ activity.pk }}', 'completed')"
+                                                        title="Concluir">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-tasks fa-3x text-muted mb-3"></i>
+                            <h4 class="text-muted">Nenhuma atividade encontrada</h4>
+                            <p class="text-muted">Você não possui atividades atribuídas ou os filtros aplicados não retornaram resultados.</p>
+                            <a href="{% url 'activities:activity_create' %}" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Criar Primeira Atividade
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function updateStatus(activityId, newStatus) {
+    if (confirm('Tem certeza que deseja alterar o status desta atividade?')) {
+        fetch(`/activities/${activityId}/update-status/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+            body: `status=${newStatus}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Erro ao atualizar status: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Erro ao atualizar status');
+        });
+    }
+}
+</script>
+{% endblock %} 

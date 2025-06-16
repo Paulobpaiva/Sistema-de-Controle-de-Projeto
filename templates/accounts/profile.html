@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Meu Perfil - Controle de Projetos{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0 text-primary">
+                        <i class="fas fa-user-circle me-2"></i>Meu Perfil
+                    </h1>
+                    <p class="text-muted mb-0">Gerencie suas informações pessoais</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Informações Pessoais
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Nome Completo</h6>
+                            <p>{{ user.get_full_name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Nome de Usuário</h6>
+                            <p>{{ user.username }}</p>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Email</h6>
+                            <p>{{ user.email }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Data de Registro</h6>
+                            <p>{{ user.date_joined|date:"d/m/Y" }}</p>
+                        </div>
+                    </div>
+                    
+                    {% if worker %}
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Nível</h6>
+                            <span class="badge bg-primary">{{ worker.get_level_display }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Departamento</h6>
+                            <p>{{ worker.department }}</p>
+                        </div>
+                    </div>
+                    
+                    {% if worker.phone %}
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Telefone</h6>
+                            <p>{{ worker.phone }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <hr>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Seu perfil ainda não foi completado. 
+                        <a href="{% url 'accounts:complete_profile' %}" class="alert-link">Complete agora</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-cog me-2"></i>Ações
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        {% if not worker %}
+                            <a href="{% url 'accounts:complete_profile' %}" class="btn btn-primary">
+                                <i class="fas fa-user-plus me-2"></i>Completar Perfil
+                            </a>
+                        {% endif %}
+                        <a href="#" class="btn btn-outline-secondary">
+                            <i class="fas fa-key me-2"></i>Alterar Senha
+                        </a>
+                        <a href="#" class="btn btn-outline-secondary">
+                            <i class="fas fa-edit me-2"></i>Editar Perfil
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action.name }} - Controle de Projetos{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'activities:action_list' %}">Ações</a></li>
+                            <li class="breadcrumb-item active">{{ action.name }}</li>
+                        </ol>
+                    </nav>
+                    <h1 class="h3 mb-0 text-primary">{{ action.name }}</h1>
+                    <p class="text-muted mb-0">Detalhes da ação e suas atividades</p>
+                </div>
+                <div>
+                    <a href="{% url 'activities:action_list' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Voltar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Action Details -->
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Informações da Ação
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Status</h6>
+                            <span class="badge bg-{% if action.status == 'completed' %}success{% elif action.status == 'in_progress' %}warning{% else %}secondary{% endif %} fs-6">
+                                {{ action.get_status_display }}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Progresso</h6>
+                            <div class="progress mb-2" style="height: 20px;">
+                                <div class="progress-bar bg-success" role="progressbar" 
+                                     style="width: {{ action.progress_percentage }}%" 
+                                     aria-valuenow="{{ action.progress_percentage }}" 
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    {{ action.progress_percentage }}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Responsável</h6>
+                            <p>{{ action.owner.full_name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Período</h6>
+                            <p>{{ action.start_date|date:"d/m/Y" }} - {{ action.end_date|date:"d/m/Y" }}</p>
+                            {% if action.is_overdue %}
+                                <small class="text-danger">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>Atrasado
+                                </small>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    {% if action.description %}
+                    <hr>
+                    <div>
+                        <h6>Descrição</h6>
+                        <p>{{ action.description }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if action.budget %}
+                    <hr>
+                    <div>
+                        <h6>Orçamento</h6>
+                        <p class="h5 text-primary">R$ {{ action.budget|floatformat:2 }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Activities List -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-tasks me-2"></i>Atividades ({{ activities.count }})
+                    </h5>
+                    <a href="{% url 'activities:activity_create' %}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus me-2"></i>Nova Atividade
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if activities %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Atividade</th>
+                                        <th>Responsável</th>
+                                        <th>Status</th>
+                                        <th>Prioridade</th>
+                                        <th>Prazo</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for activity in activities %}
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <a href="{% url 'activities:activity_detail' activity.pk %}" class="text-decoration-none fw-bold">
+                                                    {{ activity.name }}
+                                                </a>
+                                                {% if activity.description %}
+                                                    <br><small class="text-muted">{{ activity.description|truncatechars:50 }}</small>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td>{{ activity.assigned_to.full_name }}</td>
+                                        <td>
+                                            <span class="badge status-{{ activity.status }}">
+                                                {{ activity.get_status_display }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge priority-{{ activity.priority }}">
+                                                {{ activity.get_priority_display }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="{% if activity.is_overdue %}text-danger fw-bold{% endif %}">
+                                                {{ activity.deadline|date:"d/m/Y" }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="{% url 'activities:activity_detail' activity.pk %}" 
+                                                   class="btn btn-sm btn-outline-primary" 
+                                                   title="Ver detalhes">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{% url 'activities:activity_update' activity.pk %}" 
+                                                   class="btn btn-sm btn-outline-warning" 
+                                                   title="Editar">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-tasks fa-2x text-muted mb-3"></i>
+                            <h5 class="text-muted">Nenhuma atividade encontrada</h5>
+                            <p class="text-muted">Esta ação ainda não possui atividades cadastradas.</p>
+                            <a href="{% url 'activities:activity_create' %}" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Criar Primeira Atividade
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Statistics -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>Estatísticas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6 mb-3">
+                            <div class="border-end">
+                                <h4 class="text-primary mb-1">{{ activities.count }}</h4>
+                                <small class="text-muted">Total</small>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <h4 class="text-success mb-1">{{ activities|length|add:"0" }}</h4>
+                            <small class="text-muted">Concluídas</small>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-warning mb-1">{{ activities|length|add:"0" }}</h4>
+                            <small class="text-muted">Em Andamento</small>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-danger mb-1">{{ activities|length|add:"0" }}</h4>
+                            <small class="text-muted">Atrasadas</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-bolt me-2"></i>Ações Rápidas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'activities:activity_create' %}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Nova Atividade
+                        </a>
+                        <a href="{% url 'dashboard:activities_report' %}" class="btn btn-outline-info">
+                            <i class="fas fa-chart-bar me-2"></i>Ver Relatório
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.progress {
+    border-radius: 10px;
+}
+
+.progress-bar {
+    border-radius: 10px;
+}
+
+.btn-sm {
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+
+.table th {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+</style>
+{% endblock %} 

@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}Relatório de Tempo - Controle de Projetos{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0 text-primary">
+                        <i class="fas fa-clock me-2"></i>Relatório de Tempo
+                    </h1>
+                    <p class="text-muted mb-0">Análise do tempo gasto nas atividades</p>
+                </div>
+                <div>
+                    <a href="{% url 'dashboard:index' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Voltar ao Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="start_date" class="form-label">Data Início</label>
+                            <input type="date" name="start_date" id="start_date" class="form-control" value="{{ start_date }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="end_date" class="form-label">Data Fim</label>
+                            <input type="date" name="end_date" id="end_date" class="form-control" value="{{ end_date }}">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-filter me-2"></i>Filtrar
+                            </button>
+                            <a href="{% url 'dashboard:time_report' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Limpar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-clock fa-2x text-primary mb-2"></i>
+                    <h4 class="text-primary">{{ total_hours|floatformat:1 }}</h4>
+                    <p class="text-muted mb-0">Total de Horas</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-2x text-success mb-2"></i>
+                    <h4 class="text-success">{{ time_entries.count }}</h4>
+                    <p class="text-muted mb-0">Registros de Tempo</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-chart-bar me-2"></i>Tempo Gasto por Trabalhador
+                    </h5>
+                    {{ worker_time_chart_div|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Time Entries Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-table me-2"></i>Registros de Tempo
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if time_entries %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Trabalhador</th>
+                                        <th>Atividade</th>
+                                        <th>Início</th>
+                                        <th>Fim</th>
+                                        <th>Duração</th>
+                                        <th>Descrição</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for entry in time_entries %}
+                                    <tr>
+                                        <td>{{ entry.start_time|date:"d/m/Y" }}</td>
+                                        <td>{{ entry.worker.full_name }}</td>
+                                        <td>
+                                            <a href="{% url 'activities:activity_detail' entry.activity.pk %}" class="text-decoration-none">
+                                                {{ entry.activity.name }}
+                                            </a>
+                                        </td>
+                                        <td>{{ entry.start_time|time:"H:i" }}</td>
+                                        <td>{{ entry.end_time|time:"H:i"|default:"--" }}</td>
+                                        <td>{{ entry.duration_hours }}h</td>
+                                        <td>{{ entry.description|truncatechars:50 }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-clock fa-3x text-muted mb-3"></i>
+                            <h4 class="text-muted">Nenhum registro de tempo encontrado</h4>
+                            <p class="text-muted">Não há registros de tempo que correspondam aos filtros aplicados.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.form-control {
+    border-radius: 10px;
+    border: 2px solid #E9ECEF;
+    padding: 12px 15px;
+}
+
+.table th {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+</style>
+{% endblock %} 

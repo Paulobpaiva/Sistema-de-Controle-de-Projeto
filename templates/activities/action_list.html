@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}Ações - Controle de Projetos{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0 text-primary">
+                        <i class="fas fa-list me-2"></i>Ações
+                    </h1>
+                    <p class="text-muted mb-0">Gerencie as ações do projeto</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions List -->
+    <div class="row">
+        {% if actions %}
+            {% for action in actions %}
+            <div class="col-lg-6 col-xl-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title mb-0">
+                                <a href="{% url 'activities:action_detail' action.pk %}" class="text-decoration-none">
+                                    {{ action.name }}
+                                </a>
+                            </h5>
+                            <span class="badge bg-{% if action.status == 'completed' %}success{% elif action.status == 'in_progress' %}warning{% else %}secondary{% endif %}">
+                                {{ action.get_status_display }}
+                            </span>
+                        </div>
+                        
+                        {% if action.description %}
+                            <p class="card-text text-muted">{{ action.description|truncatechars:100 }}</p>
+                        {% endif %}
+                        
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <small class="text-muted">Responsável:</small>
+                                <p class="mb-0">{{ action.owner.full_name }}</p>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted">Progresso:</small>
+                                <div class="progress mt-1" style="height: 8px;">
+                                    <div class="progress-bar bg-success" style="width: {{ action.progress_percentage }}%"></div>
+                                </div>
+                                <small class="text-muted">{{ action.progress_percentage }}%</small>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <small class="text-muted">Início:</small>
+                                <p class="mb-0">{{ action.start_date|date:"d/m/Y" }}</p>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted">Término:</small>
+                                <p class="mb-0 {% if action.is_overdue %}text-danger{% endif %}">
+                                    {{ action.end_date|date:"d/m/Y" }}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        {% if action.budget %}
+                        <div class="mb-3">
+                            <small class="text-muted">Orçamento:</small>
+                            <p class="mb-0">R$ {{ action.budget|floatformat:2 }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                {{ action.activities.count }} atividade{{ action.activities.count|pluralize:"s" }}
+                            </small>
+                            <a href="{% url 'activities:action_detail' action.pk %}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-eye me-1"></i>Ver Detalhes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-list fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">Nenhuma ação encontrada</h4>
+                        <p class="text-muted">Não há ações cadastradas no sistema.</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.progress {
+    border-radius: 10px;
+}
+
+.progress-bar {
+    border-radius: 10px;
+}
+
+.btn-sm {
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+</style>
+{% endblock %} 

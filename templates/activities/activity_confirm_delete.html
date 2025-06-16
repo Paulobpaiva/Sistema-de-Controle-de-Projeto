@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Excluir Atividade - Controle de Projetos{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center p-5">
+                    <i class="fas fa-exclamation-triangle fa-3x text-warning mb-4"></i>
+                    <h3 class="text-warning mb-3">Confirmar Exclusão</h3>
+                    <p class="text-muted mb-4">
+                        Tem certeza que deseja excluir a atividade <strong>"{{ activity.name }}"</strong>?
+                    </p>
+                    <p class="text-danger small mb-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Esta ação não pode ser desfeita e todos os dados relacionados serão perdidos.
+                    </p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="{% url 'activities:activity_detail' activity.pk %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-2"></i>Excluir Atividade
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.btn {
+    border-radius: 10px;
+    padding: 10px 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %} 

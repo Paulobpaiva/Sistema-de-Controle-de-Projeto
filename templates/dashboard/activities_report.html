@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block title %}Relatório de Atividades - Controle de Projetos{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0 text-primary">
+                        <i class="fas fa-chart-bar me-2"></i>Relatório de Atividades
+                    </h1>
+                    <p class="text-muted mb-0">Análise detalhada das atividades do projeto</p>
+                </div>
+                <div>
+                    <a href="{% url 'dashboard:index' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Voltar ao Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" id="status" class="form-control">
+                                <option value="">Todos os status</option>
+                                {% for value, label in status_choices %}
+                                    <option value="{{ value }}" {% if current_filters.status == value %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="priority" class="form-label">Prioridade</label>
+                            <select name="priority" id="priority" class="form-control">
+                                <option value="">Todas as prioridades</option>
+                                {% for value, label in priority_choices %}
+                                    <option value="{{ value }}" {% if current_filters.priority == value %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="action" class="form-label">Ação</label>
+                            <select name="action" id="action" class="form-control">
+                                <option value="">Todas as ações</option>
+                                {% for action in actions %}
+                                    <option value="{{ action.pk }}" {% if current_filters.action == action.pk|stringformat:"s" %}selected{% endif %}>
+                                        {{ action.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-filter me-2"></i>Filtrar
+                            </button>
+                            <a href="{% url 'dashboard:activities_report' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Limpar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-tasks fa-2x text-primary mb-2"></i>
+                    <h4 class="text-primary">{{ activities.count }}</h4>
+                    <p class="text-muted mb-0">Total de Atividades</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-clock fa-2x text-warning mb-2"></i>
+                    <h4 class="text-warning">{{ total_time_spent|floatformat:1 }}</h4>
+                    <p class="text-muted mb-0">Horas Totais</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-line fa-2x text-success mb-2"></i>
+                    <h4 class="text-success">{{ avg_time_per_activity|floatformat:1 }}</h4>
+                    <p class="text-muted mb-0">Média por Atividade</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activities Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-table me-2"></i>Lista de Atividades
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if activities %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Atividade</th>
+                                        <th>Ação</th>
+                                        <th>Responsável</th>
+                                        <th>Status</th>
+                                        <th>Prioridade</th>
+                                        <th>Prazo</th>
+                                        <th>Tempo Gasto</th>
+                                        <th>Horas Estimadas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for activity in activities %}
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <a href="{% url 'activities:activity_detail' activity.pk %}" class="text-decoration-none fw-bold">
+                                                    {{ activity.name }}
+                                                </a>
+                                                {% if activity.description %}
+                                                    <br><small class="text-muted">{{ activity.description|truncatechars:50 }}</small>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'activities:action_detail' activity.action.pk %}" class="text-decoration-none">
+                                                {{ activity.action.name }}
+                                            </a>
+                                        </td>
+                                        <td>{{ activity.assigned_to.full_name }}</td>
+                                        <td>
+                                            <span class="badge status-{{ activity.status }}">
+                                                {{ activity.get_status_display }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge priority-{{ activity.priority }}">
+                                                {{ activity.get_priority_display }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="{% if activity.is_overdue %}text-danger fw-bold{% endif %}">
+                                                {{ activity.deadline|date:"d/m/Y" }}
+                                            </span>
+                                        </td>
+                                        <td>{{ activity.total_time_spent }}h</td>
+                                        <td>{{ activity.estimated_hours|default:"--" }}h</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+                            <h4 class="text-muted">Nenhuma atividade encontrada</h4>
+                            <p class="text-muted">Não há atividades que correspondam aos filtros aplicados.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.form-control {
+    border-radius: 10px;
+    border: 2px solid #E9ECEF;
+    padding: 12px 15px;
+}
+
+.table th {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+</style>
+{% endblock %} 

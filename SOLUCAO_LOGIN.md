@@ -21,73 +21,25 @@ venv\Scripts\activate
 ### Passo 3: Criar o Usuário Admin
 Execute o comando:
 ```cmd
-python manage.py shell
+python manage.py createsuperuser
 ```
 
-### Passo 4: No Shell do Django, Cole o Código:
-```python
-from django.contrib.auth.models import User
+Siga as instruções do terminal para definir um usuário e senha fortes.
 
-# Criar usuário admin
-admin_user = User.objects.create_user(
-    username='admin',
-    email='admin@example.com',
-    password='1234',
-    first_name='Administrador',
-    last_name='Sistema',
-    is_staff=True,
-    is_superuser=True,
-    is_active=True
-)
-
-print("Usuário admin criado com sucesso!")
-print("Usuário: admin")
-print("Senha: 1234")
-```
-
-### Passo 5: Sair do Shell
-```python
-exit()
-```
-
-### Passo 6: Iniciar o Servidor
+### Passo 4: Iniciar o Servidor
 ```cmd
 python manage.py runserver
 ```
 
-### Passo 7: Acessar o Sistema
+### Passo 5: Acessar o Sistema
 - Abra o navegador
 - Acesse: http://localhost:8000
-- Use as credenciais:
-  - **Usuário**: admin
-  - **Senha**: 1234
-
-## 🔄 Alternativa: Se o Usuário Já Existe
-
-Se aparecer erro de usuário já existente, use este código no shell:
-
-```python
-from django.contrib.auth.models import User
-
-# Buscar usuário existente
-admin_user = User.objects.get(username='admin')
-
-# Atualizar senha e permissões
-admin_user.set_password('1234')
-admin_user.is_active = True
-admin_user.is_staff = True
-admin_user.is_superuser = True
-admin_user.save()
-
-print("Senha do usuário admin atualizada!")
-print("Usuário: admin")
-print("Senha: 1234")
-```
+- Use as credenciais que você definiu
 
 ## 🎯 Resultado Esperado
 
 Após seguir os passos, você deve conseguir:
-1. Fazer login com admin/1234
+1. Fazer login com o usuário criado
 2. Acessar o dashboard
 3. Ver todas as funcionalidades do sistema
 

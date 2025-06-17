@@ -42,39 +42,11 @@ class Command(BaseCommand):
         except Exception as e:
             self.stdout.write(self.style.ERROR(f'❌ Erro nos arquivos estáticos: {e}'))
         
-        # Criar superusuário
-        if not User.objects.filter(username='admin').exists():
-            User.objects.create_superuser(
-                username='admin',
-                email='admin@controleprojetos.com',
-                password='1234'
-            )
-            self.stdout.write(self.style.SUCCESS('✅ Superusuário "admin" criado'))
-        else:
-            self.stdout.write(self.style.WARNING('ℹ️ Superusuário "admin" já existe'))
+        # Orientar criação manual do superusuário
+        self.stdout.write(self.style.WARNING('⚠️  Crie o superusuário manualmente com: python manage.py createsuperuser'))
         
-        # Criar perfil de worker para admin
-        try:
-            admin_user = User.objects.get(username='admin')
-            worker, created = Worker.objects.get_or_create(
-                user=admin_user,
-                defaults={
-                    'name': 'Administrador',
-                    'email': 'admin@controleprojetos.com',
-                    'phone': '(11) 99999-9999',
-                    'role': 'Gerente',
-                    'department': 'TI',
-                    'is_active': True
-                }
-            )
-            if created:
-                self.stdout.write(self.style.SUCCESS('✅ Perfil de worker criado para admin'))
-            else:
-                self.stdout.write(self.style.WARNING('ℹ️ Perfil de worker já existe para admin'))
-        except Exception as e:
-            self.stdout.write(self.style.ERROR(f'❌ Erro ao criar perfil de worker: {e}'))
-        
-        # Criar dados de exemplo se não existirem
+        # Criar perfil de worker para admin (opcional, pode ser removido se depender do admin)
+        # Dados de exemplo
         if Activity.objects.count() == 0 or options['force']:
             try:
                 # Criar ações de exemplo
@@ -121,6 +93,4 @@ class Command(BaseCommand):
         else:
             self.stdout.write(self.style.WARNING('ℹ️ Dados de exemplo já existem'))
         
-        self.stdout.write(self.style.SUCCESS('🎉 Configuração concluída com sucesso!'))
-        self.stdout.write(self.style.SUCCESS('📧 Login: admin'))
-        self.stdout.write(self.style.SUCCESS('🔑 Senha: 1234')) 
+        self.stdout.write(self.style.SUCCESS('🎉 Configuração concluída com sucesso!')) 

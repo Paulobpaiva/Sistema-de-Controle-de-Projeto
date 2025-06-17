@@ -4,9 +4,6 @@
 
 **Acesse o sistema:** [https://controle-projetos.onrender.com](https://controle-projetos.onrender.com)
 
-- **Login:** `admin`
-- **Senha:** `1234`
-
 ---
 
 ## 🚀 Deploy Realizado
@@ -63,22 +60,17 @@ python manage.py runserver
 
 ### 6. Acesse
 - **URL:** http://localhost:8000
-- **Login:** admin
-- **Senha:** 1234
 
 ---
 
-## 🔐 Credenciais Padrão
+## 🔐 Criação do Superusuário
 
-### Superusuário
-- **Usuário:** admin
-- **Senha:** 1234
-- **Email:** admin@controleprojetos.com
+Após o deploy, crie o superusuário com:
+```bash
+python manage.py createsuperuser
+```
 
-### Painel Administrativo
-- **URL:** [https://controle-projetos.onrender.com/admin/](https://controle-projetos.onrender.com/admin/)
-- **Login:** admin
-- **Senha:** 1234
+Nunca compartilhe usuário e senha de admin publicamente.
 
 ---
 

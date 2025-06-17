@@ -7,6 +7,9 @@ from datetime import date, timedelta
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
 
+print('⚠️  Criação automática de admin removida por segurança.')
+print('Crie o superusuário manualmente com: python manage.py createsuperuser')
+
 from django.contrib.auth.models import User
 from activities.models import Worker, Action, Activity
 

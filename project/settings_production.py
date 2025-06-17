@@ -10,10 +10,10 @@ from .settings import *
 DEBUG = False
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-a97_lyjop(yl&uwd@!un4d)^*)g5y+t)-!#se)i!j*96q1k%3u')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # Allow Railway to set the hostname
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['controle-projetos.onrender.com']
 
 # Database configuration for Railway
 DATABASES = {

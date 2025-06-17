@@ -26,8 +26,8 @@ class Command(BaseCommand):
         except Exception as e:
             self.stdout.write(self.style.ERROR(f'❌ Erro ao coletar arquivos estáticos: {e}'))
         
-        # Criar superusuário
-        self.create_superuser()
+        # Orientar criação manual do superusuário
+        self.stdout.write(self.style.WARNING('⚠️  Crie o superusuário manualmente com: python manage.py createsuperuser'))
         
         # Criar perfil de worker
         self.create_worker_profile()
@@ -36,20 +36,6 @@ class Command(BaseCommand):
         self.create_sample_data()
         
         self.stdout.write(self.style.SUCCESS('🎉 Configuração concluída com sucesso!'))
-        self.stdout.write('📧 Login: admin')
-        self.stdout.write('🔑 Senha: 1234')
-
-    def create_superuser(self):
-        """Criar superusuário se não existir"""
-        if not User.objects.filter(username='admin').exists():
-            User.objects.create_superuser(
-                username='admin',
-                email='admin@controleprojetos.com',
-                password='1234'
-            )
-            self.stdout.write(self.style.SUCCESS("✅ Superusuário 'admin' criado com sucesso!"))
-        else:
-            self.stdout.write("ℹ️ Superusuário 'admin' já existe")
 
     def create_worker_profile(self):
         """Criar perfil de worker para o admin"""

@@ -2,6 +2,13 @@
 
 Um sistema moderno de gestão de projetos desenvolvido em Django com interface responsiva e dashboard interativo.
 
+## 🌐 **APLICAÇÃO ONLINE**
+
+**Acesse o sistema:** [https://controle-projetos.onrender.com](https://controle-projetos.onrender.com)
+
+- **Login:** `admin`
+- **Senha:** `1234`
+
 ## 🚀 Funcionalidades
 
 ### ✅ Sistema de Autenticação
@@ -44,38 +51,48 @@ Um sistema moderno de gestão de projetos desenvolvido em Django com interface r
 - **Banco de Dados**: SQLite (desenvolvimento) / PostgreSQL (produção)
 - **Ícones**: Font Awesome 6
 - **Formulários**: Django Crispy Forms, Widget Tweaks
+- **Deploy**: Render (gratuito)
 
-## 📦 Instalação
+## 🚀 Deploy
 
-### 1. Clone o repositório
+### 🌐 **Online (Recomendado)**
+O sistema está hospedado gratuitamente no Render:
+- **URL:** [https://controle-projetos.onrender.com](https://controle-projetos.onrender.com)
+- **Login:** `admin`
+- **Senha:** `1234`
+
+### 💻 **Local**
+Para executar localmente:
+
+#### 1. Clone o repositório
 ```bash
 git clone <url-do-repositorio>
 cd controle-de-prj
 ```
 
-### 2. Crie um ambiente virtual
+#### 2. Crie um ambiente virtual
 ```bash
 python -m venv venv
 venv\Scripts\activate  # Windows
 source venv/bin/activate  # Linux/Mac
 ```
 
-### 3. Instale as dependências
+#### 3. Instale as dependências
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configure o banco de dados
+#### 4. Configure o banco de dados
 ```bash
 python manage.py migrate
 ```
 
-### 5. Crie um superusuário
+#### 5. Crie um superusuário
 ```bash
 python manage.py createsuperuser
 ```
 
-### 6. Execute o servidor
+#### 6. Execute o servidor
 ```bash
 python manage.py runserver
 ```
@@ -152,15 +169,17 @@ controle-de-prj/
 │   └── dashboard/        # Templates do dashboard
 ├── static/               # Arquivos estáticos
 ├── requirements.txt      # Dependências
+├── render.yaml           # Configuração Render
 └── manage.py            # Script de gerenciamento
 ```
 
 ## 🚀 Uso Rápido
 
 ### 1. Acesse o sistema
-- URL: http://localhost:8000
-- Usuário: admin
-- Senha: 1234
+- **Online:** [https://controle-projetos.onrender.com](https://controle-projetos.onrender.com)
+- **Local:** http://localhost:8000
+- **Usuário:** admin
+- **Senha:** 1234
 
 ### 2. Complete seu perfil
 - Acesse "Perfil" no menu
@@ -198,78 +217,26 @@ controle-de-prj/
 - Busque por nome ou descrição
 - Visualize atividades atrasadas
 
-## 🔧 Personalização
+## 🌟 Deploy no Render
 
-### Adicionar Novos Status
-Edite `activities/models.py`:
+### Vantagens
+- ✅ **100% Gratuito**
+- ✅ **PostgreSQL incluído**
+- ✅ **SSL/HTTPS automático**
+- ✅ **Deploy automático via GitHub**
+- ✅ **Interface simples**
 
-```python
-STATUS_CHOICES = [
-    ('not_started', 'Não Iniciado'),
-    ('in_progress', 'Em Andamento'),
-    ('completed', 'Concluído'),
-    ('paused', 'Pausado'),
-    ('cancelled', 'Cancelado'),  # Novo status
-]
-```
-
-### Adicionar Novos Níveis
-Edite `activities/models.py`:
-
-```python
-LEVEL_CHOICES = [
-    ('admin', 'Administrador'),
-    ('manager', 'Gerente'),
-    ('collaborator', 'Colaborador'),
-    ('intern', 'Estagiário'),  # Novo nível
-]
-```
-
-## 🐛 Solução de Problemas
-
-### Erro de Migração
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
-
-### Erro de Dependências
-```bash
-pip install --upgrade -r requirements.txt
-```
-
-### Erro de Banco de Dados
-```bash
-python manage.py flush  # Limpa o banco
-python manage.py migrate  # Recria as tabelas
-```
+### Configuração
+- Arquivo `render.yaml` para configuração automática
+- `project/settings_render.py` para produção
+- Deploy automático ao fazer push no GitHub
 
 ## 📞 Suporte
 
-Para suporte ou dúvidas:
-- Abra uma issue no repositório
-- Consulte a documentação do Django
-- Verifique os logs do servidor
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
-
-## 👑 Superusuário e Painel Administrativo
-
-- O sistema já vem com um superusuário padrão:
-  - **Usuário:** admin
-  - **Senha:** 1234
-- Acesse o painel administrativo em: [http://localhost:8000/admin/](http://localhost:8000/admin/)
-- No painel admin, você pode:
-  - Aprovar, bloquear, editar e excluir usuários
-  - Promover usuários a staff/admin
-  - Gerenciar permissões e grupos
-  - Visualizar e editar todos os dados do sistema
-
-### Aprovação manual de novos usuários (opcional)
-Se desejar que novos usuários só possam acessar após aprovação, basta marcar o campo "Ativo" (is_active) no admin.
+- **Documentação Render:** [render.com/docs](https://render.com/docs)
+- **Issues:** Use o GitHub Issues
+- **Email:** [seu-email@exemplo.com]
 
 ---
 
-**Desenvolvido com ❤️ usando Django e Bootstrap** 
+**🎉 Sistema online e funcionando! Acesse:** [https://controle-projetos.onrender.com](https://controle-projetos.onrender.com) 

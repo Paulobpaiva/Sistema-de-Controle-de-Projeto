@@ -8,7 +8,7 @@ import os
 import django
 
 # Configurar Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings_production')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings_render')
 django.setup()
 
 from django.contrib.auth.models import User

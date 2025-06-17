@@ -30,7 +30,7 @@ Certifique-se de que estes arquivos estão no repositório:
 
 ```bash
 git add .
-git commit -m "Configuração para Render"
+git commit -m "Correção erro 500 - configurações atualizadas"
 git push origin main
 ```
 
@@ -65,9 +65,10 @@ Após o deploy, execute:
 
 ```bash
 # Via Render Dashboard → Shell
+export DJANGO_SETTINGS_MODULE=project.settings_render
 python manage.py migrate
 python manage.py collectstatic --noinput
-python manage.py setup_railway
+python manage.py createsuperuser --username admin --email admin@controleprojetos.com
 ```
 
 ## 🔐 Credenciais de Acesso

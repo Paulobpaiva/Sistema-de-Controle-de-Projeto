@@ -7,6 +7,7 @@ services:
     startCommand: |
       python manage.py migrate --noinput
       python manage.py collectstatic --noinput
+      python manage.py createsuperuser --noinput || true
       gunicorn project.wsgi:application
     envVars:
       - key: PYTHON_VERSION
@@ -19,6 +20,12 @@ services:
         fromDatabase:
           name: controle-projetos-db
           property: connectionString
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: admin
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: paulopaiva_@hotmail.com
+      - key: DJANGO_SUPERUSER_PASSWORD
+        value: babi10
 
 databases:
   - name: controle-projetos-db

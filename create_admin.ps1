@@ -36,3 +36,8 @@ Write-Host "Senha: 1234" -ForegroundColor White
 Write-Host "URL: http://localhost:8000" -ForegroundColor White
 Write-Host "`nPressione qualquer tecla para continuar..." -ForegroundColor Cyan
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") 
+
+Write-Host "Configurando variáveis de ambiente..." -ForegroundColor Green
+$env:SECRET_KEY = "sua-chave-secreta-aqui"
+$env:DJANGO_SETTINGS_MODULE = "project.settings_production"
+Write-Host "Variáveis de ambiente configuradas com sucesso!" -ForegroundColor Green 

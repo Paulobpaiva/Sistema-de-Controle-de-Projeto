@@ -237,4 +237,26 @@ controle-de-prj/
 
 ---
 
-**🎉 Sistema online e funcionando! Acesse:** [https://controle-projetos.onrender.com](https://controle-projetos.onrender.com) 
+**🎉 Sistema online e funcionando! Acesse:** [https://controle-projetos.onrender.com](https://controle-projetos.onrender.com)
+
+## Acesso Admin Seguro
+
+Após o deploy, crie seu superusuário com o comando:
+
+```bash
+python manage.py createsuperuser
+```
+
+Siga as instruções do terminal para definir um usuário e senha fortes. **Nunca compartilhe credenciais de admin publicamente.**
+
+## Deploy
+
+Siga as instruções do arquivo DEPLOY_RENDER.md para realizar o deploy gratuito no Render.
+
+## Observações de Segurança
+- Não deixe usuário e senha padrão em arquivos públicos.
+- Altere imediatamente qualquer senha que tenha sido exposta.
+- Use sempre senhas fortes para o admin.
+
+## Documentação
+Consulte os arquivos de documentação do projeto para mais detalhes sobre instalação, configuração e deploy. 

@@ -177,7 +177,7 @@ controle-de-prj/
 - **Online:** [https://controle-projetos.onrender.com](https://controle-projetos.onrender.com)
 - **Local:** http://localhost:8000
 - **Usuário:** admin
-- **Senha:** 1234
+- **Senha:** xxxx
 
 ### 2. Complete seu perfil
 - Acesse "Perfil" no menu
@@ -233,7 +233,7 @@ controle-de-prj/
 
 - **Documentação Render:** [render.com/docs](https://render.com/docs)
 - **Issues:** Use o GitHub Issues
-- **Email:** [seu-email@exemplo.com]
+- **Email:** paulobpaivam@gmail.com
 
 ---
 

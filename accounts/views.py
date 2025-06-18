@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
@@ -38,9 +38,12 @@ class RegisterView(CreateView):
     success_url = reverse_lazy('accounts:login')
     
     def form_valid(self, form):
-        response = super().form_valid(form)
-        messages.success(self.request, 'Conta criada com sucesso! Faça login para continuar.')
-        return response
+        user = form.save(commit=False)
+        user.is_active = False  # Usuário fica inativo até aprovação
+        user.save()
+        form.save_m2m()
+        messages.success(self.request, 'Conta criada com sucesso! Aguarde aprovação do administrador.')
+        return redirect('accounts:login')
 
 
 @login_required
@@ -70,3 +73,21 @@ def complete_profile(request):
         form = WorkerRegistrationForm()
     
     return render(request, 'accounts/complete_profile.html', {'form': form})
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def pending_approval(request):
+    pendentes = User.objects.filter(is_active=False)
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+        action = request.POST.get('action')
+        user = User.objects.get(id=user_id)
+        if action == 'aprovar':
+            user.is_active = True
+            user.save()
+            messages.success(request, f'Usuário {user.username} aprovado!')
+        elif action == 'rejeitar':
+            user.delete()
+            messages.warning(request, f'Usuário {user.username} rejeitado e removido!')
+        return redirect('accounts:pending_approval')
+    return render(request, 'accounts/pending_approval.html', {'pendentes': pendentes})

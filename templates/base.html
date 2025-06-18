@@ -294,7 +294,8 @@
     </nav>
     <div style="height: 80px;"></div> <!-- Espaço para a navbar fixa -->
     <!-- Conteúdo principal -->
-    <div class="main-content container mt-4">
+    {% block main_content %}
+    <div class="main-content container mt-4 centraliza-tela">
         <!-- Messages -->
         {% if messages %}
             {% for message in messages %}
@@ -309,6 +310,16 @@
         <!-- Page Content -->
         {% block content %}{% endblock %}
     </div>
+    <style>
+    .centraliza-tela {
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    </style>
+    {% endblock %}
 
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

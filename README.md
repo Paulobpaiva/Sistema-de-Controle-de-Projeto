@@ -57,7 +57,7 @@ Um sistema moderno de gestão de projetos desenvolvido em Django com interface r
 O sistema está hospedado gratuitamente no Render:
 - **URL:** [https://controle-projetos.onrender.com](https://controle-projetos.onrender.com)
 - **Login:** `admin`
-- **Senha:** `1234`
+- **Senha:** `xxxx`
 
 ### 💻 **Local**
 Para executar localmente:

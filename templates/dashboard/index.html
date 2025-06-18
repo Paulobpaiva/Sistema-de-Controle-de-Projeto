@@ -3,233 +3,207 @@
 {% block title %}Dashboard - Controle de Projetos{% endblock %}
 
 {% block content %}
-<div class="d-flex flex-column align-items-center justify-content-center w-100" style="min-height: 80vh;">
-    <div class="dashboard-container w-100" style="max-width: 1200px;">
-        <!-- Dashboard Header -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card p-4 mb-3">
-                    <h2 class="mb-0 text-primary fw-bold">
-                        <i class="fas fa-chart-pie me-2"></i>Dashboard
-                    </h2>
-                    <span class="text-muted">Visão geral do sistema de controle de projetos</span>
+<div class="container-fluid">
+    <!-- Dashboard Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card p-4 mb-3">
+                <h2 class="mb-0 text-primary fw-bold">
+                    <i class="fas fa-chart-pie me-2"></i>Dashboard
+                </h2>
+                <span class="text-muted">Visão geral do sistema de controle de projetos</span>
+            </div>
+        </div>
+    </div>
+    <!-- KPIs -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="kpi-card h-100">
+                <div class="kpi-number">{{ total_actions }}</div>
+                <div class="kpi-label">
+                    <i class="fas fa-list me-2"></i>Total de Ações
                 </div>
             </div>
         </div>
-        <!-- KPIs -->
-        <div class="row mb-4">
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="kpi-card">
-                    <div class="kpi-number">{{ total_actions }}</div>
-                    <div class="kpi-label">
-                        <i class="fas fa-list me-2"></i>Total de Ações
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="kpi-card">
-                    <div class="kpi-number">{{ total_activities }}</div>
-                    <div class="kpi-label">
-                        <i class="fas fa-tasks me-2"></i>Total de Atividades
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="kpi-card">
-                    <div class="kpi-number">{{ completed_activities }}</div>
-                    <div class="kpi-label">
-                        <i class="fas fa-check-circle me-2"></i>Atividades Concluídas
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="kpi-card">
-                    <div class="kpi-number">{{ overdue_activities }}</div>
-                    <div class="kpi-label">
-                        <i class="fas fa-exclamation-triangle me-2"></i>Atividades Atrasadas
-                    </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="kpi-card h-100">
+                <div class="kpi-number">{{ total_activities }}</div>
+                <div class="kpi-label">
+                    <i class="fas fa-tasks me-2"></i>Total de Atividades
                 </div>
             </div>
         </div>
-        <!-- Progress Bar -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <i class="fas fa-chart-line me-2"></i>Progresso Geral
-                        </h5>
-                        <div class="progress mb-2" style="height: 20px;">
-                            <div class="progress-bar bg-success" role="progressbar" 
-                                 style="width: {{ progress_percentage }}%" 
-                                 aria-valuenow="{{ progress_percentage }}" 
-                                 aria-valuemin="0" aria-valuemax="100">
-                                {{ progress_percentage }}%
-                            </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="kpi-card h-100">
+                <div class="kpi-number">{{ completed_activities }}</div>
+                <div class="kpi-label">
+                    <i class="fas fa-check-circle me-2"></i>Atividades Concluídas
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="kpi-card h-100">
+                <div class="kpi-number">{{ overdue_activities }}</div>
+                <div class="kpi-label">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Atividades Atrasadas
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Progress Bar -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-chart-line me-2"></i>Progresso Geral
+                    </h5>
+                    <div class="progress mb-2" style="height: 20px;">
+                        <div class="progress-bar bg-success" role="progressbar" 
+                             style="width: {{ progress_percentage }}%" 
+                             aria-valuenow="{{ progress_percentage }}" 
+                             aria-valuemin="0" aria-valuemax="100">
+                            {{ progress_percentage }}%
                         </div>
-                        <small class="text-muted">{{ completed_activities }} de {{ total_activities }} atividades concluídas</small>
                     </div>
+                    <small class="text-muted">{{ completed_activities }} de {{ total_activities }} atividades concluídas</small>
                 </div>
             </div>
         </div>
-        <!-- Charts -->
-        <div class="row mb-4">
-            <div class="col-lg-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <i class="fas fa-chart-pie me-2"></i>Atividades por Status
-                        </h5>
-                        {% if status_pie_div %}
-                            {{ status_pie_div|safe }}
-                        {% else %}
-                            <p class="text-muted text-center py-4">Nenhuma atividade encontrada para gerar o gráfico.</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <i class="fas fa-chart-bar me-2"></i>Atividades por Prioridade
-                        </h5>
-                        {% if priority_bar_div %}
-                            {{ priority_bar_div|safe }}
-                        {% else %}
-                            <p class="text-muted text-center py-4">Nenhuma atividade encontrada para gerar o gráfico.</p>
-                        {% endif %}
-                    </div>
+    </div>
+    <!-- Charts -->
+    <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-chart-pie me-2"></i>Atividades por Status
+                    </h5>
+                    {% if status_pie_div %}
+                        {{ status_pie_div|safe }}
+                    {% else %}
+                        <p class="text-muted text-center py-4">Nenhuma atividade encontrada para gerar o gráfico.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
-        <!-- Progress by Actions -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <i class="fas fa-chart-bar me-2"></i>Progresso das Ações
-                        </h5>
-                        {% if progress_bar_div %}
-                            {{ progress_bar_div|safe }}
-                        {% else %}
-                            <p class="text-muted text-center py-4">Nenhuma ação encontrada para gerar o gráfico.</p>
-                        {% endif %}
-                    </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-chart-bar me-2"></i>Atividades por Prioridade
+                    </h5>
+                    {% if priority_bar_div %}
+                        {{ priority_bar_div|safe }}
+                    {% else %}
+                        <p class="text-muted text-center py-4">Nenhuma atividade encontrada para gerar o gráfico.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
-        <!-- Recent Activities and Overdue -->
-        <div class="row">
-            <div class="col-lg-8 mb-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="fas fa-clock me-2"></i>Atividades Recentes
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        {% if recent_activities %}
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Atividade</th>
-                                            <th>Ação</th>
-                                            <th>Responsável</th>
-                                            <th>Status</th>
-                                            <th>Prazo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for activity in recent_activities %}
-                                        <tr>
-                                            <td>
-                                                <a href="{% url 'activities:activity_detail' activity.pk %}" class="text-decoration-none">
-                                                    {{ activity.name }}
-                                                </a>
-                                            </td>
-                                            <td>{{ activity.action.name }}</td>
-                                            <td>{{ activity.assigned_to.full_name }}</td>
-                                            <td>
-                                                <span class="badge status-{{ activity.status }}">
-                                                    {{ activity.get_status_display }}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="{% if activity.is_overdue %}text-danger{% endif %}">
-                                                    {{ activity.deadline|date:"d/m/Y" }}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {% else %}
-                            <p class="text-muted text-center py-4">Nenhuma atividade encontrada.</p>
-                        {% endif %}
-                    </div>
+    </div>
+    <!-- Progress by Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-chart-bar me-2"></i>Progresso das Ações
+                    </h5>
+                    {% if progress_bar_div %}
+                        {{ progress_bar_div|safe }}
+                    {% else %}
+                        <p class="text-muted text-center py-4">Nenhuma ação encontrada para gerar o gráfico.</p>
+                    {% endif %}
                 </div>
             </div>
-            <div class="col-lg-4 mb-4">
-                <div class="card">
-                    <div class="card-header bg-warning text-dark">
-                        <h5 class="card-title mb-0">
-                            <i class="fas fa-exclamation-triangle me-2"></i>Atividades Atrasadas
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        {% if overdue_activities_list %}
-                            <div class="list-group list-group-flush">
-                                {% for activity in overdue_activities_list %}
-                                <div class="list-group-item border-0 px-0">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h6 class="mb-1">
-                                                <a href="{% url 'activities:activity_detail' activity.pk %}" class="text-decoration-none">
-                                                    {{ activity.name }}
-                                                </a>
-                                            </h6>
-                                            <small class="text-muted">{{ activity.action.name }}</small>
-                                        </div>
-                                        <span class="badge bg-danger">{{ activity.deadline|date:"d/m" }}</span>
+        </div>
+    </div>
+    <!-- Recent Activities and Overdue -->
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-clock me-2"></i>Atividades Recentes
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_activities %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Atividade</th>
+                                        <th>Ação</th>
+                                        <th>Responsável</th>
+                                        <th>Status</th>
+                                        <th>Prazo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for activity in recent_activities %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'activities:activity_detail' activity.pk %}" class="text-decoration-none">
+                                                {{ activity.name }}
+                                            </a>
+                                        </td>
+                                        <td>{{ activity.action.name }}</td>
+                                        <td>{{ activity.assigned_to.full_name }}</td>
+                                        <td>
+                                            <span class="badge status-{{ activity.status }}">
+                                                {{ activity.get_status_display }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="{% if activity.is_overdue %}text-danger{% endif %}">
+                                                {{ activity.deadline|date:"d/m/Y" }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-4">Nenhuma atividade encontrada.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Atividades Atrasadas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if overdue_activities_list %}
+                        <div class="list-group list-group-flush">
+                            {% for activity in overdue_activities_list %}
+                            <div class="list-group-item border-0 px-0">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">
+                                            <a href="{% url 'activities:activity_detail' activity.pk %}" class="text-decoration-none">
+                                                {{ activity.name }}
+                                            </a>
+                                        </h6>
+                                        <small class="text-muted">{{ activity.action.name }}</small>
                                     </div>
+                                    <span class="badge bg-danger">{{ activity.deadline|date:"d/m" }}</span>
                                 </div>
-                                {% endfor %}
                             </div>
-                        {% else %}
-                            <p class="text-muted text-center py-4">Nenhuma atividade atrasada!</p>
-                        {% endif %}
-                    </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-4">Nenhuma atividade atrasada.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-// Animação dos números dos KPIs
-function animateNumbers() {
-    const kpiNumbers = document.querySelectorAll('.kpi-number');
-    kpiNumbers.forEach(element => {
-        const finalNumber = parseInt(element.textContent);
-        let currentNumber = 0;
-        const increment = finalNumber / 50;
-        const timer = setInterval(() => {
-            currentNumber += increment;
-            if (currentNumber >= finalNumber) {
-                element.textContent = finalNumber;
-                clearInterval(timer);
-            } else {
-                element.textContent = Math.floor(currentNumber);
-            }
-        }, 30);
-    });
-}
-
-// Executar animação quando a página carregar
-document.addEventListener('DOMContentLoaded', animateNumbers);
-</script>
 {% endblock %} 

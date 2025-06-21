@@ -266,26 +266,49 @@
 
 <script>
 function updateStatus(activityId, newStatus) {
+    console.log('Tentando atualizar status:', { activityId, newStatus });
+    
     if (confirm('Tem certeza que deseja alterar o status desta atividade?')) {
+        // Obter CSRF token
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        console.log('CSRF Token encontrado:', csrfToken ? 'Sim' : 'Não');
+        
+        // Preparar dados da requisição
+        const formData = new FormData();
+        formData.append('status', newStatus);
+        
+        // Fazer requisição
         fetch(`/activities/${activityId}/update-status/`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'X-CSRFToken': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest',
             },
-            body: `status=${newStatus}`
+            body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+            return response.json();
+        })
         .then(data => {
+            console.log('Response data:', data);
             if (data.success) {
+                console.log('Sucesso! Recarregando página...');
                 location.reload();
             } else {
+                console.error('Erro retornado pelo servidor:', data.message);
                 alert('Erro ao atualizar status: ' + data.message);
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Erro ao atualizar status');
+            console.error('Erro na requisição:', error);
+            console.error('Detalhes do erro:', {
+                name: error.name,
+                message: error.message,
+                stack: error.stack
+            });
+            alert('Erro ao atualizar status: ' + error.message);
         });
     }
 }

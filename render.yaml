@@ -20,12 +20,6 @@ services:
         fromDatabase:
           name: controle-projetos-db
           property: connectionString
-      - key: DJANGO_SUPERUSER_USERNAME
-        value: admin
-      - key: DJANGO_SUPERUSER_EMAIL
-        value: paulopaiva_@hotmail.com
-      - key: DJANGO_SUPERUSER_PASSWORD
-        value: babi10
 
 databases:
   - name: controle-projetos-db

@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.db.models import Q
 from .models import Action, Activity, TimeEntry, Comment, Worker
 from .forms import ActivityForm, TimeEntryForm, CommentForm
+import logging
 
 
 @login_required
@@ -182,25 +183,66 @@ def activity_delete(request, pk):
 @login_required
 def update_activity_status(request, pk):
     """Atualizar status da atividade via AJAX"""
-    if request.method == 'POST' and request.is_ajax():
-        activity = get_object_or_404(Activity, pk=pk)
-        new_status = request.POST.get('status')
+    logger = logging.getLogger(__name__)
+    
+    try:
+        # Verificar método
+        if request.method != 'POST':
+            logger.warning(f"Tentativa de acesso com método {request.method}")
+            return JsonResponse({'success': False, 'message': 'Método não permitido'})
         
+        # Verificar se é AJAX (opcional, mas útil para debug)
+        if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            logger.warning("Requisição não identificada como AJAX")
+        
+        # Obter atividade
+        try:
+            activity = get_object_or_404(Activity, pk=pk)
+        except Exception as e:
+            logger.error(f"Erro ao buscar atividade {pk}: {e}")
+            return JsonResponse({'success': False, 'message': 'Atividade não encontrada'})
+        
+        # Obter novo status
+        new_status = request.POST.get('status')
+        if not new_status:
+            logger.warning("Status não fornecido na requisição")
+            return JsonResponse({'success': False, 'message': 'Status não fornecido'})
+        
+        # Verificar permissões
         try:
             worker = request.user.worker
             if activity.assigned_to != worker and worker.level not in ['admin', 'manager']:
+                logger.warning(f"Usuário {request.user.username} tentou alterar atividade sem permissão")
                 return JsonResponse({'success': False, 'message': 'Permissão negada'})
         except Worker.DoesNotExist:
+            logger.warning(f"Usuário {request.user.username} não tem perfil de worker")
             return JsonResponse({'success': False, 'message': 'Perfil incompleto'})
         
-        if new_status in dict(Activity.STATUS_CHOICES):
+        # Verificar se o status é válido
+        valid_statuses = dict(Activity.STATUS_CHOICES)
+        if new_status not in valid_statuses:
+            logger.warning(f"Status inválido fornecido: {new_status}")
+            return JsonResponse({'success': False, 'message': f'Status inválido: {new_status}'})
+        
+        # Atualizar status
+        try:
+            old_status = activity.status
             activity.status = new_status
             activity.save()
-            return JsonResponse({'success': True, 'message': 'Status atualizado'})
-        
-        return JsonResponse({'success': False, 'message': 'Status inválido'})
-    
-    return JsonResponse({'success': False, 'message': 'Método não permitido'})
+            
+            logger.info(f"Status da atividade {pk} alterado de {old_status} para {new_status} por {request.user.username}")
+            return JsonResponse({
+                'success': True, 
+                'message': f'Status alterado de {valid_statuses[old_status]} para {valid_statuses[new_status]}'
+            })
+            
+        except Exception as e:
+            logger.error(f"Erro ao salvar atividade {pk}: {e}")
+            return JsonResponse({'success': False, 'message': f'Erro interno: {str(e)}'})
+            
+    except Exception as e:
+        logger.error(f"Erro inesperado em update_activity_status: {e}")
+        return JsonResponse({'success': False, 'message': 'Erro interno do servidor'})
 
 
 @login_required

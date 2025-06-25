@@ -269,48 +269,100 @@ function updateStatus(activityId, newStatus) {
     console.log('Tentando atualizar status:', { activityId, newStatus });
     
     if (confirm('Tem certeza que deseja alterar o status desta atividade?')) {
-        // Obter CSRF token
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        console.log('CSRF Token encontrado:', csrfToken ? 'Sim' : 'Não');
+        // Obter CSRF token com tratamento de erro
+        let csrfToken;
+        try {
+            const csrfElement = document.querySelector('[name=csrfmiddlewaretoken]');
+            if (!csrfElement) {
+                console.error('CSRF token não encontrado no DOM');
+                alert('Erro: Token de segurança não encontrado. Recarregue a página e tente novamente.');
+                return;
+            }
+            csrfToken = csrfElement.value;
+            console.log('CSRF Token encontrado:', csrfToken ? 'Sim' : 'Não');
+        } catch (error) {
+            console.error('Erro ao obter CSRF token:', error);
+            alert('Erro ao obter token de segurança. Recarregue a página e tente novamente.');
+            return;
+        }
         
         // Preparar dados da requisição
         const formData = new FormData();
         formData.append('status', newStatus);
         
-        // Fazer requisição
+        // Fazer requisição com timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos timeout
+        
         fetch(`/activities/${activityId}/update-status/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': csrfToken,
                 'X-Requested-With': 'XMLHttpRequest',
             },
-            body: formData
+            body: formData,
+            signal: controller.signal
         })
         .then(response => {
+            clearTimeout(timeoutId);
             console.log('Response status:', response.status);
             console.log('Response headers:', response.headers);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             return response.json();
         })
         .then(data => {
             console.log('Response data:', data);
             if (data.success) {
                 console.log('Sucesso! Recarregando página...');
-                location.reload();
+                // Usar setTimeout para evitar problemas de listener
+                setTimeout(() => {
+                    location.reload();
+                }, 100);
             } else {
                 console.error('Erro retornado pelo servidor:', data.message);
                 alert('Erro ao atualizar status: ' + data.message);
             }
         })
         .catch(error => {
+            clearTimeout(timeoutId);
             console.error('Erro na requisição:', error);
             console.error('Detalhes do erro:', {
                 name: error.name,
                 message: error.message,
                 stack: error.stack
             });
-            alert('Erro ao atualizar status: ' + error.message);
+            
+            if (error.name === 'AbortError') {
+                alert('Timeout: A requisição demorou muito para responder. Tente novamente.');
+            } else {
+                alert('Erro ao atualizar status: ' + error.message);
+            }
         });
     }
 }
+
+// Adicionar listener para capturar erros globais
+window.addEventListener('error', function(event) {
+    console.error('Erro global capturado:', {
+        message: event.message,
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno,
+        error: event.error
+    });
+});
+
+// Adicionar listener para capturar promessas rejeitadas não tratadas
+window.addEventListener('unhandledrejection', function(event) {
+    console.error('Promessa rejeitada não tratada:', {
+        reason: event.reason,
+        promise: event.promise
+    });
+    event.preventDefault(); // Previne o erro de aparecer no console
+});
 </script>
 {% endblock %} 

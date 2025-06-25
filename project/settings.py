@@ -169,3 +169,8 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+# Django Admin Customization
+ADMIN_SITE_HEADER = "Administração do Sistema CP"
+ADMIN_SITE_TITLE = "Administração do Sistema CP"
+ADMIN_INDEX_TITLE = "Bem-vindo à Administração do Sistema CP"

@@ -23,7 +23,7 @@ def create_superuser():
         User.objects.create_superuser(
             username='admin',
             email='admin@controleprojetos.com',
-            password='1234'
+            password='SUA_SENHA_AQUI'  # Altere para uma senha segura
         )
         print("✅ Superusuário 'admin' criado com sucesso!")
     else:
@@ -114,7 +114,7 @@ def main():
     
     print("🎉 Configuração concluída com sucesso!")
     print("📧 Login: admin")
-    print("🔑 Senha: 1234")
+print("🔑 Senha: (a senha que você definiu)")
 
 if __name__ == '__main__':
     main() 

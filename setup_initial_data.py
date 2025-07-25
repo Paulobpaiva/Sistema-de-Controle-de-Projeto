@@ -138,7 +138,7 @@ def setup_initial_data():
     
     print("\nDados iniciais configurados com sucesso!")
     print(f"Usuário: admin")
-    print(f"Senha: 1234")
+    print(f"Senha: (a senha que você definiu)")
     print(f"Worker criado com nível: {worker.get_level_display()}")
 
 if __name__ == '__main__':

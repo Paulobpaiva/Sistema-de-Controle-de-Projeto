@@ -76,7 +76,7 @@ def test_ajax_endpoint():
         # Tentar login (você precisará fornecer credenciais válidas)
         login_data = {
             'username': 'admin',  # Substitua por um usuário válido
-            'password': 'admin123',  # Substitua por uma senha válida
+            'password': 'SUA_SENHA_AQUI',  # Substitua por uma senha válida
             'csrfmiddlewaretoken': csrf_token
         }
         

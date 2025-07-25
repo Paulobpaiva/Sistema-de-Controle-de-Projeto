@@ -115,7 +115,7 @@ echo "✅ Dados de exemplo criados"
 echo "🎉 Configuração concluída!"
 echo "Acesse: https://controle-projetos.onrender.com"
 echo "Login: admin"
-echo "Senha: 1234"
+echo "Senha: (a senha que você definiu no comando createsuperuser)"
 '''
     
     print(script)

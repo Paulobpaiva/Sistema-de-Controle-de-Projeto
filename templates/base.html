@@ -209,6 +209,54 @@
         .priority-high { background-color: #F8D7DA; color: #721C24; }
         .priority-urgent { background-color: #F5C6CB; color: #721C24; }
         
+        /* Dropdown Styles */
+        .dropdown-menu {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            margin-top: 8px;
+            padding: 8px 0;
+            min-width: 200px;
+        }
+        
+        .dropdown-item {
+            color: var(--primary-color) !important;
+            font-weight: 500;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 2px 8px;
+        }
+        
+        .dropdown-item:hover {
+            background: var(--accent-color) !important;
+            color: white !important;
+            transform: translateX(5px);
+        }
+        
+        .dropdown-divider {
+            margin: 8px 0;
+            border-color: rgba(26, 43, 80, 0.1);
+        }
+        
+        .dropdown-toggle::after {
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dropdown.show .dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+        
+        /* Garantir que o dropdown apareça */
+        .dropdown-menu.show {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
         @media (max-width: 768px) {
             .main-content {
                 margin: 10px;
@@ -217,6 +265,14 @@
             
             .kpi-number {
                 font-size: 2rem;
+            }
+            
+            .dropdown-menu {
+                position: fixed !important;
+                top: 70px !important;
+                right: 10px !important;
+                left: 10px !important;
+                width: auto !important;
             }
         }
     </style>
@@ -325,6 +381,52 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+        // Garantir que o dropdown funcione corretamente
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar todos os dropdowns
+            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl);
+            });
+            
+            // Adicionar evento de clique para fechar dropdown quando clicar fora
+            document.addEventListener('click', function(event) {
+                var dropdowns = document.querySelectorAll('.dropdown');
+                dropdowns.forEach(function(dropdown) {
+                    if (!dropdown.contains(event.target)) {
+                        var dropdownMenu = dropdown.querySelector('.dropdown-menu');
+                        if (dropdownMenu.classList.contains('show')) {
+                            bootstrap.Dropdown.getInstance(dropdown.querySelector('.dropdown-toggle')).hide();
+                        }
+                    }
+                });
+            });
+            
+            // Melhorar a experiência do dropdown no mobile
+            if (window.innerWidth <= 768) {
+                var dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+                dropdownToggles.forEach(function(toggle) {
+                    toggle.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        var dropdown = this.closest('.dropdown');
+                        var dropdownMenu = dropdown.querySelector('.dropdown-menu');
+                        
+                        if (dropdownMenu.classList.contains('show')) {
+                            dropdownMenu.classList.remove('show');
+                        } else {
+                            // Fechar outros dropdowns
+                            document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
+                                menu.classList.remove('show');
+                            });
+                            dropdownMenu.classList.add('show');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
     
     {% block extra_js %}{% endblock %}
 </body>

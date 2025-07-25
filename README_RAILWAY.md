@@ -46,7 +46,7 @@ Siga o guia completo em `DEPLOY_RAILWAY.md`
 
 - **URL:** `https://seu-projeto.railway.app`
 - **Login:** `admin`
-- **Senha:** `1234`
+- **Senha:** `(definida pelo usuário)`
 
 ## 💰 Custos Estimados
 

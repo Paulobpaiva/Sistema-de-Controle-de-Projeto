@@ -10,7 +10,7 @@
 
 ### 🔐 **Credenciais de Acesso**
 - **Login:** `admin`
-- **Senha:** `1234`
+- **Senha:** `(definida pelo usuário)`
 - **Painel Admin:** [https://controle-projetos.onrender.com/admin/](https://controle-projetos.onrender.com/admin/)
 
 ### 📈 **Funcionalidades Ativas**
@@ -44,7 +44,7 @@
 
 1. **Acesse:** [https://controle-projetos.onrender.com](https://controle-projetos.onrender.com)
 2. **Login:** `admin`
-3. **Senha:** `1234`
+3. **Senha:** `(definida pelo usuário)`
 4. **Comece a usar!**
 
 ## 📞 **Suporte**

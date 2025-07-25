@@ -129,7 +129,7 @@ Este script verificará:
 Após o setup:
 - **URL**: `https://controle-projetos.onrender.com/`
 - **Login**: `admin`
-- **Senha**: `1234`
+- **Senha**: `(definida pelo usuário)`
 
 ## 🚨 Se o Problema Persistir
 
@@ -142,7 +142,7 @@ Após o setup:
 
 Após as correções, o sistema deve:
 - ✅ Carregar a página de login sem erro 500
-- ✅ Permitir login com credenciais admin/1234
+- ✅ Permitir login com credenciais admin/(sua senha)
 - ✅ Redirecionar para o dashboard
 - ✅ Funcionar normalmente
 

@@ -4,7 +4,7 @@
 
 O erro no dashboard foi corrigido. Agora você pode:
 
-1. **Fazer login** com admin/1234
+1. **Fazer login** com admin/(sua senha)
 2. **Acessar o dashboard** sem erros
 3. **Ver gráficos e KPIs** funcionando
 4. **Usar todas as funcionalidades** do sistema
@@ -19,7 +19,7 @@ python create_sample_data.py
 ```
 
 Isso vai criar:
-- ✅ Usuário admin com senha 1234
+- ✅ Usuário admin com senha definida pelo usuário
 - ✅ 3 ações de exemplo
 - ✅ 8 atividades de exemplo
 - ✅ Dados para testar gráficos e relatórios
@@ -27,7 +27,7 @@ Isso vai criar:
 ### 2. Acessar o Sistema
 - **URL**: http://localhost:8000
 - **Usuário**: admin
-- **Senha**: 1234
+- **Senha**: (definida pelo usuário)
 
 ### 3. Explorar Funcionalidades
 - **Dashboard**: KPIs, gráficos e atividades recentes

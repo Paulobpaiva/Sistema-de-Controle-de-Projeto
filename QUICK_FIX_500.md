@@ -26,7 +26,7 @@ python manage.py collectstatic --noinput
 # Criar superusuário
 python manage.py createsuperuser --username admin --email admin@controleprojetos.com
 
-# Definir senha quando solicitado: 1234
+# Definir senha quando solicitado: (sua senha segura)
 ```
 
 ### 4. Testar Aplicação
@@ -59,7 +59,7 @@ SELECT * FROM auth_user;
 
 - **URL**: https://controle-projetos.onrender.com/
 - **Login**: admin
-- **Senha**: 1234
+- **Senha**: (definida pelo usuário)
 
 ## 🚀 Deploy Atualizado
 
